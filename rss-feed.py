@@ -9,10 +9,7 @@ RSS_FEEDS = {
     # Machine Learning
     "Cube Dev Blog": "https://blog.statsbot.co/feed",
     "Machine Learning Mastery": "https://machinelearningmastery.com/feed/",
-    "ML Uber Engineering": "https://eng.uber.com/feed/",
     "AWS Machine Learning": "https://aws.amazon.com/blogs/machine-learning/feed/",
-    "arXiv ML": "https://arxiv.org/rss/cs.LG",
-    "arXiv Stats ML": "https://arxiv.org/rss/stat.ML",
     "ML Reddit": "https://www.reddit.com/r/MachineLearning/.rss",
     "ML in Production": "https://mlinproduction.com/rss/",
     "Jay Alammar Blog": "http://jalammar.github.io/feed.xml",
@@ -33,14 +30,11 @@ RSS_FEEDS = {
     "Seita's Place": "https://danieltakeshi.github.io/feed.xml",
     "VitalAI Lab": "https://vitalab.github.io/feed.xml",
     "Andrej Karpathy": "https://medium.com/feed/@karpathy",
-    "OpenAI Blog": "https://openai.com/blog/rss/",
     "Microsoft Research": "https://www.microsoft.com/en-us/research/feed/",
     "Google AI": "https://blog.google/technology/ai/rss/",
-    "Fast AI": "https://www.fast.ai/feed.xml",
     
     # Reinforcement Learning
     "RL Reddit": "https://www.reddit.com/r/reinforcementlearning/.rss",
-    "RL Weekly": "https://www.getrevue.co/profile/seungjaeryanlee/issues.rss",
     "RL Paper Review": "https://dtransposed.github.io/feed.xml",
     
     # Data Science
