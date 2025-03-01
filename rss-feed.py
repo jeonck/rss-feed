@@ -4,15 +4,69 @@ import pandas as pd
 from datetime import datetime
 import pytz
 
-# RSS feed sources
+# RSS feed sources organized by category
 RSS_FEEDS = {
+    # Machine Learning
+    "Cube Dev Blog": "https://blog.statsbot.co/feed",
+    "Machine Learning Mastery": "https://machinelearningmastery.com/feed/",
+    "ML Uber Engineering": "https://eng.uber.com/feed/",
+    "AWS Machine Learning": "https://aws.amazon.com/blogs/machine-learning/feed/",
+    "arXiv ML": "https://arxiv.org/rss/cs.LG",
+    "arXiv Stats ML": "https://arxiv.org/rss/stat.ML",
+    "ML Reddit": "https://www.reddit.com/r/MachineLearning/.rss",
+    "ML in Production": "https://mlinproduction.com/rss/",
+    "Jay Alammar Blog": "http://jalammar.github.io/feed.xml",
+    "JMLR Papers": "http://www.jmlr.org/jmlr.xml",
+    "Distill Blog": "https://distill.pub/rss.xml",
+    
+    # Artificial Intelligence
     "매일경제 AI": "https://www.mk.co.kr/rss/50200011/",
-    "Machine Learning Mastery": "https://machinelearningmastery.com/blog/feed/",
-    "AI Business": "https://aibusiness.com/rss.xml",
-    "AI News" : "https://www.artificialintelligence-news.com/feed/rss/",
-    "AI Tech Park": "https://ai-techpark.com/category/ai/feed/",
-    "AI Ahead": "https://magazine.sebastianraschka.com/feed",
-    "AI Models": "https://aimodels.substack.com/feed",
+    "AI Trends": "https://www.aitrends.com/feed/",
+    "AI Weirdness": "https://aiweirdness.com/rss",
+    "BAIR Blog": "https://bair.berkeley.edu/blog/feed.xml",
+    "MIT AI News": "https://news.mit.edu/rss/topic/artificial-intelligence-ai",
+    "NVIDIA AI Blog": "https://blogs.nvidia.com/feed/",
+    "David Stutz AI": "https://davidstutz.de/feed/",
+    "AI Reddit": "https://www.reddit.com/r/artificial/.rss",
+    "Neural Networks Reddit": "https://www.reddit.com/r/neuralnetworks/.rss",
+    "Science Daily AI": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
+    "Seita's Place": "https://danieltakeshi.github.io/feed.xml",
+    "VitalAI Lab": "https://vitalab.github.io/feed.xml",
+    "Andrej Karpathy": "https://medium.com/feed/@karpathy",
+    "OpenAI Blog": "https://openai.com/blog/rss/",
+    "Microsoft Research": "https://www.microsoft.com/en-us/research/feed/",
+    "Google AI": "https://blog.google/technology/ai/rss/",
+    "Fast AI": "https://www.fast.ai/feed.xml",
+    
+    # Reinforcement Learning
+    "RL Reddit": "https://www.reddit.com/r/reinforcementlearning/.rss",
+    "RL Weekly": "https://www.getrevue.co/profile/seungjaeryanlee/issues.rss",
+    "RL Paper Review": "https://dtransposed.github.io/feed.xml",
+    
+    # Data Science
+    "Data Science Central": "https://www.datasciencecentral.com/feed/",
+    "John Cook Blog": "https://www.johndcook.com/blog/feed/"
+}
+
+# Category mappings
+CATEGORY_MAPPING = {
+    "Machine Learning": [
+        "Cube Dev Blog", "Machine Learning Mastery", "ML Uber Engineering",
+        "AWS Machine Learning", "arXiv ML", "arXiv Stats ML", "ML Reddit",
+        "ML in Production", "Jay Alammar Blog", "JMLR Papers", "Distill Blog"
+    ],
+    "Artificial Intelligence": [
+        "매일경제 AI", "AI Trends", "AI Weirdness", "BAIR Blog", "MIT AI News",
+        "NVIDIA AI Blog", "David Stutz AI", "AI Reddit", "Neural Networks Reddit",
+        "Science Daily AI", "Seita's Place", "VitalAI Lab", "Andrej Karpathy",
+        "OpenAI Blog", "Microsoft Research", "Google AI", "Fast AI"
+    ],
+    "Reinforcement Learning": [
+        "RL Reddit", "RL Weekly", "RL Paper Review"
+    ],
+    "Data Science": [
+        "Data Science Central", "John Cook Blog"
+    ]
 }
 
 def format_date(date_str):
@@ -59,14 +113,23 @@ def main():
 
     # Setup sidebar
     with st.sidebar:
-        # Combine default and custom feeds
-        all_feeds = {**RSS_FEEDS, **st.session_state.custom_feeds}
+        # Add category filter
+        categories = ["All", "Machine Learning", "Artificial Intelligence", "Reinforcement Learning", "Data Science"]
+        selected_category = st.radio("Filter by Category", categories)
         
-        # Add feed selector
+        # Filter feeds by category
+        if selected_category == "All":
+            filtered_feeds = {**RSS_FEEDS, **st.session_state.custom_feeds}
+        else:
+            # You'll need to add category mapping logic here
+            filtered_feeds = {k: v for k, v in RSS_FEEDS.items() if k in CATEGORY_MAPPING.get(selected_category, [])}
+            filtered_feeds.update(st.session_state.custom_feeds)
+        
+        # Add feed selector with filtered feeds
         st.subheader("Select Feed")
         selected_feed = st.selectbox(
             "Choose a news source",
-            list(all_feeds.keys())
+            list(filtered_feeds.keys())
         )
         
         # Add refresh button
@@ -101,8 +164,8 @@ def main():
 
     st.subheader(f'Latest articles from {selected_feed}')
     
-    # Fetch articles from selected feed
-    articles = fetch_rss_feed(all_feeds[selected_feed])
+    # Fetch articles from selected feed using filtered_feeds instead of all_feeds
+    articles = fetch_rss_feed(filtered_feeds[selected_feed])
     
     # Convert to DataFrame and display articles
     df = pd.DataFrame(articles)
